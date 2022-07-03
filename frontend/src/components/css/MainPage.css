@@ -1,0 +1,80 @@
+.html .body {
+    background-color: white;
+}
+
+#logoutButton {
+    width: 10%;
+}
+
+#mainTitleDiv {
+    display: flex;   
+    align-items: center;
+    justify-content: center;
+}
+
+#mainTitle {
+    margin: 0% 3% 0% 0%;
+}
+
+.monthDay {
+    width: 12vw;
+    height: 5vw;
+    margin: 0.5%;
+    float: left;
+    background-color: white;
+    border-radius: 10%;
+    box-shadow: 1vw 1vw 1vw #888888;
+}
+
+.eventForm {
+    display: flex;
+    justify-items: center;
+    align-items: center;
+
+
+    flex-direction: column;
+}
+
+.eventFormDiv {
+    flex-direction: column;
+
+    display: flex;
+    position: absolute;
+
+    margin-left: 30%;
+    padding: 2% 3%;
+    z-index: 3;
+    border-radius: 10%;
+
+    background-color: white;
+}
+
+#blackScreen{
+    display: block;
+    position: fixed; 
+    top: 0; bottom: 0; left: 0; right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.5;
+    z-index: 2;
+}
+
+#eventTitle {
+    margin: 0% 17%;
+}
+
+.dummyDay {
+    visibility: hidden;
+}
+
+.event {
+    background-color: aqua;
+    border-radius: 10%;
+    float: right;
+    margin: 2%;
+}
+
+.dayNumber {
+    margin: 0;
+}

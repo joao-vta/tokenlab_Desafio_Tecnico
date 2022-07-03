@@ -1,5 +1,4 @@
 const { isValidObjectId } = require('mongoose');
-const User = require('../models/User');
 const UserModel = require('../models/User')
 
 module.exports.createUser = async (req, res) => {
@@ -27,11 +26,8 @@ module.exports.getUser = async (req, res) => {
 
     const userFound = await UserModel.findOne({'username':req.body.username});
 
-    if (!userFound) 
-        return res.status(400).send("Username does not exist");
-
-    if (userFound.password != req.body.password) 
-        return res.status(400).send("Password doest not match");
+    if (!userFound || userFound.password != req.body.password) 
+        return res.status(400).send("Username or Password incorrect");
     else 
         return res.status(200).json(userFound);
 }
