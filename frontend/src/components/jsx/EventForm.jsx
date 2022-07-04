@@ -5,21 +5,44 @@ import axios from "axios";
 const EventForm = props => {
     const [cookies, setCookie] = useCookies();
 
-    async function createEvent() {
+    async function deleteEvent(event) {
+        let response = await axios.delete('http://localhost:5300/event/delete/' + event._id)
+        .catch((error) => {
+            console.log(error);
+        });
+
+        props.close();
+    }
+
+    async function editEvent(event) {
         let form = document.getElementById('eventForm');
 
         let startTime = Date.parse(form.startDate.value);
         let endTime = Date.parse(form.endDate.value);
         let description = form.descricao.value;
 
-        let response = await axios.post('http://localhost:5300/event/create', {
-            "userID" : cookies.userID,
-            "inicio" : startTime,
-            "fim" : endTime,
-            "descricao" : description
-        }).catch((error) => {
-            console.log(error);
-        });
+        console.log(event);
+
+        if (!event){
+            let response = await axios.post('http://localhost:5300/event/create', {
+                "userID" : cookies.userID,
+                "inicio" : startTime,
+                "fim" : endTime,
+                "descricao" : description
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+        else {
+            console.log('sending edit post');
+            let response = await axios.put('http://localhost:5300/event/edit/' + event._id, {
+                "inicio" : startTime ? startTime : event.startDate,
+                "fim" : endTime ? endTime : event.endDate,
+                "descricao" : description ? description : event.descricao
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
 
         props.close();
     }
@@ -27,7 +50,9 @@ const EventForm = props => {
     return (
 <div class="eventFormDiv">
     <div class="row">
-    <h2 id="eventTitle"> Novo Evento</h2> <button type="button"  onClick={() => {props.close()}}
+    <h2 id="eventTitle">
+        {props.editEvent ? props.editEvent.descricao.split(' ')[0] : 'Novo Evento'}
+    </h2> <button type="button"  onClick={() => {props.close()}}
   class="btn btn-secondary">X</button></div>
     <form class="eventForm" id="eventForm">
 
@@ -46,8 +71,15 @@ const EventForm = props => {
             type="text" placeholder="Descricao" />
         </div>
 
-        <a class="btn btn-primary" onClick={() => createEvent()}
+        <div class='row'>
+
+        <a class="btn btn-primary" onClick={() => {editEvent(props.editEvent)}}
         >Submit</a>
+        {props.editEvent &&
+        <a class="btn btn-danger" onClick={() => {deleteEvent(props.editEvent)}}
+        >Delete</a>
+        }
+        </div>
     </form>
 </div>
   );

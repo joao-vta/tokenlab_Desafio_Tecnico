@@ -13,6 +13,7 @@ function MainPage() {
       "year" : (new Date()).getFullYear(),
       "month" : (new Date()).getMonth(),
       "popup" : false,
+      "editEvent" : null,
       "pulledDateEvents" : false,
       "events" : []
     });
@@ -21,10 +22,11 @@ function MainPage() {
     const monthNames = ["January", "February", "March", "April", "May", "June",
      "July", "August", "September", "October", "November", "December"];
 
-     async function setPopup(val) {
+     async function createEventPopup(val) {
       setState({
         ...currState,
-        "popup" : val
+        "popup" : val,
+        "editEvent" : null,
       });
     }
 
@@ -90,7 +92,14 @@ function MainPage() {
 </nav>
 
 {currState.popup &&
-<EventForm close={() => {setPopup(false)}}/>}
+<EventForm editEvent={currState.editEvent} close={() => {
+  setState({
+    ...currState,
+    "popup" : false,
+    "pulledDateEvents" : false,
+    "events" : []
+  });
+}}/>}
 
 {currState.popup &&
 <div id="blackScreen"></div>}
@@ -110,7 +119,7 @@ function MainPage() {
       <button class="btn btn-light btn-sm" onClick={()=>{changeYear(-1)}}>-</button>
       </div>
     </h2>
-    <button type="button" onClick={() => setPopup(true)}
+    <button type="button" onClick={() => createEventPopup(true)}
     class="btn btn-secondary btn-sm">Create Event +</button>
     
 </div>
@@ -119,7 +128,9 @@ function MainPage() {
 
 <div className='monthDays'>
   {[...Array((currDate.getDay()+1)%7).keys()].map(n => 
-      <MonthDay day={n} dummy={true} key={'dummy'+n.toString()}/>
+      <MonthDay day={n} dummy={true} key={'dummy'+n.toString()}
+        editFunc = {null}
+        />
     )}
   {[...Array(currDate.getDate()).keys()].slice(1).map(n => 
     <MonthDay 
@@ -128,7 +139,14 @@ function MainPage() {
       month={currState.month}
       day={n}  
       dummy={false} 
-      key={'day'+n.toString()}/>
+      key={'day'+n.toString()}
+      editFunc = {(event) => {
+        setState({
+          ...currState,
+          "popup" : true,
+          "editEvent" : event
+        })}}
+        />
   )}
 </div>
 </>

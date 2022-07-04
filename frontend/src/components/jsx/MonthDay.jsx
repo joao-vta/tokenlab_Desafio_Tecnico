@@ -22,14 +22,15 @@ const MonthDay = props => {
         }
       });
     }
-    console.log(props.day, eventsInDay);
 
     return (
 <div class={props.dummy ? "monthDay dummyDay" : "monthDay"}>  
   {props.day}
 
   {eventsInDay.map((val) => 
-    <div class='event btn btn-secondary btn-sm'>{val.descricao}</div>
+    <div class='event btn btn-secondary btn-sm' onClick={() => {props.editFunc(val)}}>
+      {val.descricao ? val.descricao.split(' ')[0] : ''}
+    </div>
   )}
 
 </div>
